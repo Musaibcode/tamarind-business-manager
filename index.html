@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#246b45"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Tamarind Manager"><meta name="description" content="Offline tamarind packet production calculator and daily records">
+<title>Tamarind Business Manager</title>
+<style>
+:root{--bg:#f5f6f2;--card:#fff;--ink:#20251f;--muted:#69736a;--green:#246b45;--green2:#e8f3eb;--line:#e3e8e1;--orange:#a85b21}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 48px}.header{display:flex;align-items:center;gap:14px;margin-bottom:20px}.logo{width:48px;height:48px;border-radius:14px;background:var(--green2);display:grid;place-items:center;font-size:25px}.header h1{font-size:23px;line-height:1.2;margin:0}.header p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #17241408}
+.ratios{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.ratio{background:#f7f9f6;border-radius:12px;padding:12px;text-align:center}.ratio strong{display:block;font-size:22px;color:var(--green)}.ratio span{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:8px;margin:16px 0}.tabs button{flex:1;border:1px solid var(--line);background:#fff;color:var(--muted);padding:12px;border-radius:10px;font-weight:650;cursor:pointer}.tabs button.active{background:var(--green);border-color:var(--green);color:#fff}
+h2{font-size:18px;margin:0 0 14px}h3{font-size:14px;margin:16px 0 8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}.field input{width:100%;padding:12px;border:1px solid #d8dfd7;border-radius:9px;font:inherit;background:#fff;color:var(--ink)}input:focus{outline:2px solid #b6d8c1;border-color:var(--green)}
+.result{background:var(--green2);border-radius:13px;padding:17px;margin-top:16px}.result small{color:var(--muted)}.big{font-size:34px;font-weight:800;color:var(--green);line-height:1.2;margin:3px 0 10px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:9px 4px;border-bottom:1px solid var(--line);text-align:left}td:last-child,th:last-child{text-align:right;font-variant-numeric:tabular-nums}tr:last-child td{border-bottom:0}.muted{color:var(--muted);font-size:12px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}button.action{border:0;border-radius:10px;padding:11px 15px;background:var(--green);color:#fff;font-weight:650;cursor:pointer}button.secondary{background:#eef2ed;color:var(--ink);border:1px solid var(--line)}button.danger{background:#fff0ed;color:#9b3828;border:1px solid #f0d2cb}
+.history-item{border:1px solid var(--line);border-radius:11px;padding:12px;margin:9px 0}.history-top{display:flex;justify-content:space-between;gap:10px;font-weight:700}.pill{background:var(--green2);color:var(--green);border-radius:20px;padding:3px 9px;font-size:12px;white-space:nowrap}
+.hidden{display:none}.notice{font-size:12px;color:var(--muted);margin-top:12px}.empty{text-align:center;color:var(--muted);padding:22px 8px}
+@media(max-width:600px){.wrap{padding:18px 12px 36px}.card{padding:16px}.grid{grid-template-columns:1fr}.header h1{font-size:20px}.tabs button{font-size:13px;padding:10px 6px}.big{font-size:30px}}
+@media(max-width:600px){
+ body{padding-bottom:env(safe-area-inset-bottom)}
+ .wrap{padding:calc(14px + env(safe-area-inset-top)) 12px 28px}
+ .header{position:sticky;top:0;background:var(--bg);z-index:5;padding:8px 0}
+ .card{border-radius:18px}
+ .field input,select{min-height:48px;font-size:16px}
+ .tabs button{min-height:48px}
+ button.action{min-height:46px;flex:1}
+}
+</style>
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon-192.png"><link rel="apple-touch-icon" href="./icon-192.png">
+</head>
+<body>
+<div class="wrap">
+  <header class="header"><div class="logo">🌿</div><div><h1>Tamarind Business Manager</h1><p>Packet calculator · Material planning · Daily production records</p></div></header>
+  <section class="card">
+    <h2>Cleaning yield</h2>
+    <div class="ratios">
+      <div class="ratio"><strong>65%</strong><span>Cleaned tamarind</span></div>
+      <div class="ratio"><strong>25%</strong><span>Seeds</span></div>
+      <div class="ratio"><strong>10%</strong><span>Boats / shells</span></div>
+    </div>
+    <p class="notice">Each packet uses 150 g cleaned tamarind + 350 g flower. Enter all stock quantities in kilograms.</p>
+  </section>
+
+  <section class="card">
+    <h2>Choose packet size</h2>
+    <div class="field">
+      <label for="packetType">Packet recipe</label>
+      <select id="packetType" style="width:100%;padding:12px;border:1px solid #d8dfd7;border-radius:9px;font:inherit;background:#fff;color:var(--ink)">
+        <option value="standard">Standard packet: 150 g cleaned tamarind + 350 g flower</option>
+        <option value="small">Small packet: 50 g cleaned tamarind + 150 g flower</option>
+      </select>
+    </div>
+    <p class="notice">The selected recipe is used in both calculators and saved with each production record.</p>
+  </section>
+
+  <div class="tabs">
+    <button id="stockTab" class="active" type="button">Available stock → packets</button>
+    <button id="targetTab" type="button">Packets → materials</button>
+  </div>
+
+  <section class="card" id="stockPanel">
+    <h2>Calculate packets from available stock</h2>
+    <div class="grid">
+      <div class="field"><label for="rawStock">Raw tamarind (kg)</label><input id="rawStock" type="number" min="0" step="any" value="25"></div>
+      <div class="field"><label for="flowerStock">Flower (kg)</label><input id="flowerStock" type="number" min="0" step="any" value="35"></div>
+    </div>
+    <div class="result">
+      <small>Complete packets possible</small>
+      <div class="big" id="packetCount">100</div>
+      <div class="muted" id="limiting">Limiting material: Both equally</div>
+    </div>
+    <h3>Raw tamarind breakdown</h3>
+    <table>
+      <tr><td>Cleaned tamarind (65%)</td><td id="cleanedStock">16.250 kg</td></tr>
+      <tr><td>Seeds (25%)</td><td id="seedsStock">6.250 kg</td></tr>
+      <tr><td>Boats / shells (10%)</td><td id="boatsStock">2.500 kg</td></tr>
+    </table>
+    <h3>Production usage and balance</h3>
+    <table>
+      <tr><td>Cleaned tamarind used</td><td id="usedClean">15.000 kg</td></tr>
+      <tr><td>Flower used</td><td id="usedFlower">35.000 kg</td></tr>
+      <tr><td>Cleaned tamarind remaining</td><td id="leftClean">1.250 kg</td></tr>
+      <tr><td>Flower remaining</td><td id="leftFlower">0.000 kg</td></tr>
+    </table>
+    <h3>Save production record</h3>
+    <div class="grid">
+      <div class="field"><label for="productionDate">Production date</label><input id="productionDate" type="date"></div>
+    </div>
+    <div class="actions"><button class="action" id="saveRecord">Save production record</button></div>
+    <p class="notice" id="saveMessage" aria-live="polite"></p>
+  </section>
+
+  <section class="card hidden" id="targetPanel">
+    <h2>Calculate materials for a target</h2>
+    <div class="field"><label for="targetPackets">Number of packets required</label><input id="targetPackets" type="number" min="0" step="1" value="100"></div>
+    <div class="result">
+      <small>Raw tamarind required</small>
+      <div class="big" id="requiredRaw">23.077 kg</div>
+      <small>Flower required</small>
+      <div class="big" id="requiredFlower">35.000 kg</div>
+    </div>
+    <h3>Cleaning breakdown for the target</h3>
+    <table>
+      <tr><td>Cleaned tamarind needed</td><td id="targetCleaned">15.000 kg</td></tr>
+      <tr><td>Seeds expected (25%)</td><td id="targetSeeds">5.769 kg</td></tr>
+      <tr><td>Boats / shells expected (10%)</td><td id="targetBoats">2.308 kg</td></tr>
+      <tr><td>Total raw materials (raw tamarind + flower)</td><td id="totalMaterials">58.077 kg</td></tr>
+    </table>
+    <div class="actions"><button class="action secondary" id="copyRequirements">Copy material requirements</button></div>
+  </section>
+
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <h2 style="margin:0">Daily production history</h2><span class="pill" id="recordCount">0 records</span>
+    </div>
+    <div id="historyList" class="empty">No production records yet. Save your first production entry above.</div>
+    <div class="actions">
+      <button class="action secondary" id="exportCsv">Export history (CSV)</button>
+      <button class="action danger" id="clearHistory">Clear history</button>
+    </div>
+    <p class="notice">Your records are saved in this browser on this device using local storage. Export a CSV backup regularly. Clearing browser data may remove saved records.</p>
+  </section>
+  <p class="muted" style="text-align:center">Tamarind Business Manager · Calculations use a 65% cleaning yield and count complete packets only.</p>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n).toLocaleString('en-IN',{minimumFractionDigits:3,maximumFractionDigits:3})+' kg';
+const num = id => Math.max(0, Number($(id).value)||0);
+let records = [];
+try { records = JSON.parse(localStorage.getItem('tamarindProductionRecords') || '[]'); if(!Array.isArray(records)) records=[]; } catch(e){ records=[]; }
+
+function recipe(){
+  return $('packetType').value === 'small'
+    ? {label:'Small packet (50 g + 150 g)', tamarind:50, flower:150}
+    : {label:'Standard packet (150 g + 350 g)', tamarind:150, flower:350};
+}
+function calcStock(){
+  const raw=num('rawStock'), flower=num('flowerStock');
+  const cleaned=raw*0.65, seeds=raw*0.25, boats=raw*0.10;
+  const rec=recipe();
+  const rawPackets=Math.floor(cleaned*1000/rec.tamarind+1e-9);
+  const flowerPackets=Math.floor(flower*1000/rec.flower+1e-9);
+  const packets=Math.min(rawPackets,flowerPackets);
+  $('packetCount').textContent=packets.toLocaleString('en-IN');
+  $('limiting').textContent=rawPackets<flowerPackets?'Limiting material: Raw tamarind':flowerPackets<rawPackets?'Limiting material: Flower':'Limiting material: Both equally';
+  $('cleanedStock').textContent=fmt(cleaned); $('seedsStock').textContent=fmt(seeds); $('boatsStock').textContent=fmt(boats);
+  const cleanUsed=packets*rec.tamarind/1000, flowerUsed=packets*rec.flower/1000;
+  $('usedClean').textContent=fmt(cleanUsed); $('usedFlower').textContent=fmt(flowerUsed);
+  $('leftClean').textContent=fmt(cleaned-cleanUsed); $('leftFlower').textContent=fmt(flower-flowerUsed);
+  return {raw,flower,cleaned,seeds,boats,packets,recipe:rec.label,tamarindPerPacket:rec.tamarind,flowerPerPacket:rec.flower};
+}
+function calcTarget(){
+  const packets=Math.floor(num('targetPackets'));
+  const rec=recipe();
+  const cleaned=packets*rec.tamarind/1000, raw=cleaned/.65, flower=packets*rec.flower/1000;
+  $('requiredRaw').textContent=fmt(raw); $('requiredFlower').textContent=fmt(flower);
+  $('targetCleaned').textContent=fmt(cleaned); $('targetSeeds').textContent=fmt(raw*.25);
+  $('targetBoats').textContent=fmt(raw*.10); $('totalMaterials').textContent=fmt(raw+flower);
+  return {packets,raw,flower,cleaned,seeds:raw*.25,boats:raw*.10,recipe:rec.label,tamarindPerPacket:rec.tamarind,flowerPerPacket:rec.flower};
+}
+function persist(){
+  try { localStorage.setItem('tamarindProductionRecords',JSON.stringify(records)); }
+  catch(e) { $('saveMessage').textContent='Record added for this session, but this browser blocked permanent local storage. Export CSV before closing.'; }
+  renderHistory();
+}
+function renderHistory(){
+  $('recordCount').textContent=records.length+' record'+(records.length===1?'':'s');
+  const host=$('historyList');
+  if(!records.length){host.className='empty';host.textContent='No production records yet. Save your first production entry above.';return;}
+  host.className='';
+  host.innerHTML=records.map(rec=>`<div class="history-item"><div class="history-top"><span>${escapeHtml(rec.date)}</span><span class="pill">${Number(rec.packets).toLocaleString('en-IN')} packets</span></div><div class="muted">${escapeHtml(rec.recipe || 'Standard packet (150 g + 350 g)')}</div><div class="muted">Raw tamarind: ${Number(rec.raw).toFixed(3)} kg · Flower: ${Number(rec.flower).toFixed(3)} kg</div><div class="muted">Cleaned: ${Number(rec.cleaned).toFixed(3)} kg · Seeds: ${Number(rec.seeds).toFixed(3)} kg · Boats: ${Number(rec.boats).toFixed(3)} kg</div></div>`).join('');
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+$('stockTab').addEventListener('click',()=>{ $('stockTab').classList.add('active');$('targetTab').classList.remove('active');$('stockPanel').classList.remove('hidden');$('targetPanel').classList.add('hidden');});
+$('targetTab').addEventListener('click',()=>{ $('targetTab').classList.add('active');$('stockTab').classList.remove('active');$('targetPanel').classList.remove('hidden');$('stockPanel').classList.add('hidden');});
+['rawStock','flowerStock'].forEach(id=>$(id).addEventListener('input',calcStock));
+$('targetPackets').addEventListener('input',calcTarget);
+$('packetType').addEventListener('change',()=>{calcStock();calcTarget();$('saveMessage').textContent='';});
+$('productionDate').value=new Date().toLocaleDateString('en-CA');
+$('saveRecord').addEventListener('click',()=>{
+  const v=calcStock();
+  if(!v.raw||!v.flower){$('saveMessage').textContent='Enter both raw tamarind and flower quantities above zero.';return;}
+  records.unshift({date:$('productionDate').value,raw:v.raw,flower:v.flower,packets:v.packets,cleaned:v.cleaned,seeds:v.seeds,boats:v.boats,recipe:v.recipe,tamarindPerPacket:v.tamarindPerPacket,flowerPerPacket:v.flowerPerPacket});
+  persist();$('saveMessage').textContent='Production record saved on this device.';
+});
+$('copyRequirements').addEventListener('click',async()=>{
+  const v=calcTarget(); const txt=`Tamarind production requirements\nPacket recipe: ${v.recipe}\nPackets: ${v.packets}\nRaw tamarind: ${v.raw.toFixed(3)} kg\nFlower: ${v.flower.toFixed(3)} kg\nCleaned tamarind: ${v.cleaned.toFixed(3)} kg\nSeeds: ${v.seeds.toFixed(3)} kg\nBoats/shells: ${v.boats.toFixed(3)} kg`;
+  try{await navigator.clipboard.writeText(txt);$('copyRequirements').textContent='Copied!';}catch(e){$('copyRequirements').textContent='Copy unavailable in this browser';}
+});
+$('exportCsv').addEventListener('click',()=>{
+  if(!records.length){alert('There are no production records to export yet.');return;}
+  const rows=[['Date','Packet recipe','Raw tamarind (kg)','Flower (kg)','Packets','Cleaned tamarind (kg)','Seeds (kg)','Boats/shells (kg)'],...records.map(r=>[r.date,r.recipe||'Standard packet (150 g + 350 g)',r.raw,r.flower,r.packets,r.cleaned,r.seeds,r.boats])];
+  const csv=rows.map(row=>row.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='tamarind-production-history.csv';a.click();URL.revokeObjectURL(url);
+});
+$('clearHistory').addEventListener('click',()=>{
+  if(!records.length)return;
+  if(confirm('Delete all saved production records from this browser?')){records=[];persist();}
+});
+calcStock();calcTarget();renderHistory();
+</script>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
